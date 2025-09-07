@@ -66,3 +66,16 @@
   .login-link a:hover {
     text-decoration: underline;
   }
+ .card {
+    max-width: 350px;
+    margin: 0 auto 1.5rem auto;
+  }
+  .card-img-top {
+    max-width: 300px;
+    max-height: 200px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+    border-radius: 4px;
+  }
+
