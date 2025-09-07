@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-v_+@og4of3pl1%v@dy(_^7c_u^7b8&^63)$w6)tsrv_^3p1bzd
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
+
 
 
 # Application definition
@@ -134,4 +135,5 @@ STATICFILES_DIRS = [
 ]
 LOGIN_URL='/accounts/login'
 LOGIN_REDIRECT_URL='/tweet/'
+
 LOGOUT_REDIRECT_URL='/tweet/'
