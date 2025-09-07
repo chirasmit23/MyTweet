@@ -8,12 +8,8 @@
         Chiras tweet
         {% endblock %}</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-         <link rel="stylesheet" href="{% static 'style.css' %}">
+<link rel="stylesheet" href="{% static 'style.css' %}">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<style>ul {
-    text-align: center;
-    list-style-position: inside;
-}</style>
 </head>
 <body  class="text-center" >
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -27,29 +23,24 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#">Home</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
       </ul>
-      <form class="d-flex" method="get" action="{% url 'search' %}">
-<input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search"/></form>
-      <a href="{% url 'tweet_list' %}"  class="btn btn-primary mx-2">TWEET HOME</a>
+      <div class="gap" ><form class="d-flex" method="get" action="{% url 'search' %}">
+<input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search"/></form></div>
+     <div  class="gap" ><a href="{% url 'tweet_list' %}"  class="btn btn-primary mx-2">TWEET HOME</a>
       {% if user.is_authenticated %}
 <form action="{% url 'logout' %}" method="post">
   {% csrf_token %}
   <button class="btn-btn-danger"type="submit">Logout</button>
 </form>
       {% else %}
-      <a href="{% url 'register' %}"  class="btn btn-success mx-2" style="text-decoration: none;">register</a>
-      <a href="{% url 'login' %}"  class="btn btn-success mx-2"style="text-decoration: none;">login</a>
+      <a href="{% url 'register' %}"  class="btn btn-success mx-2">register</a>
+      <a href="{% url 'login' %}"  class="btn btn-success mx-2">login</a>
       {% endif %}
     </div>
   </div>
 </nav>
     <div class="container">
         {% block content %}{% endblock %}
-    </div>
+    </div></div> 
 </body>
-
 </html>
-
