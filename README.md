@@ -37,16 +37,15 @@ This will start the server and make it accessible at localhost:8000.
 ## Demo Video
 
 
-https://github.com/user-attachments/assets/f7220cf4-5b4e-4b2b-a410-d454bc46c50f
+https://github.com/user-attachments/assets/d0e97b71-75f0-45e3-9287-8445ea57b235
+
+
 
 
 
 ## Screenshots
 
 
-![1000121513](https://github.com/user-attachments/assets/3e21e277-bcff-4c75-bd3d-759c5d561a1b)
-![1000121514](https://github.com/user-attachments/assets/0a3fda8b-f15e-4f7d-af8e-9bdb82bcb44b)
-![1000121515](https://github.com/user-attachments/assets/8938c4c8-5318-4de3-9b96-1a9e02d514bc)
-![1000121516](https://github.com/user-attachments/assets/be938adf-81b7-4b3c-a191-2d84bbd80a60)
+
 ## Quick start for creating django apps
 
