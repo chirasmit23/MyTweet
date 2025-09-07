@@ -28,7 +28,7 @@
 <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search"/></form></div>
      <div  class="gap" ><a href="{% url 'tweet_list' %}"  class="btn btn-primary mx-2">TWEET HOME</a>
       {% if user.is_authenticated %}
-<form action="{% url 'logout' %}" method="post">
+<form class="gap" action="{% url 'logout' %}" method="post">
   {% csrf_token %}
   <button class="btn-btn-danger"type="submit">Logout</button>
 </form>
@@ -44,3 +44,4 @@
     </div></div> 
 </body>
 </html>
+
