@@ -1,11 +1,26 @@
 {% extends "layout.html" %}
 {% block content %}
-<h2>Register Form</h2>
-<form  method="post">
-    {% csrf_token %}
-    {{form}}
-    <button type="submit"class="btn btn-primary">Register</button>
-</form>
-<p>  have an acoount !<a href="{% url 'login'  %} style="text-decoration: none;"">Login here</a></p>
-
+<div class="register-container">
+  <div class="register-card">
+    <h2>Register</h2>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+          <div class="form-error">{{ field.errors|striptags }}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+      <button type="submit" class="register-button">Register</button>
+    </form>
+    <div class="login-link">
+      Already have an account?
+      <a href="{% url 'login' %}">Login here</a>
+    </div>
+  </div>
+</div>
 {% endblock %}
