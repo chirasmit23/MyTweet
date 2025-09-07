@@ -33,14 +33,14 @@
           </div>
           {% endif %}
           <div class="mt-3 d-flex align-items-center gap-3">
-            <button class="btn btn-sm btn-outline-success js-like" data-id="{{ tweet.id }}" data-url="{% url 'like_tweet' tweet.id %}">👍</button>
-            <span id="like-count-{{ tweet.id }}">{{ tweet.likes.count }}</span>
-            <button class="btn btn-sm btn-outline-danger js-dislike" data-id="{{ tweet.id }}" data-url="{% url 'dislike_tweet' tweet.id %}">👎</button>
-            <span id="dislike-count-{{ tweet.id }}">{{ tweet.dislikes.count }}</span>
+            <button class="btn btn-sm btn-outline-success like-btn" data-id="{{ tweet.id }}" data-url="{% url 'like_tweet' tweet.id %}">👍</button>
+            <span id="like-{{ tweet.id }}">{{ tweet.likes.count }}</span>
+            <button class="btn btn-sm btn-outline-danger dislike-btn" data-id="{{ tweet.id }}" data-url="{% url 'dislike_tweet' tweet.id %}">👎</button>
+            <span id="dislike-{{ tweet.id }}">{{ tweet.dislikes.count }}</span>
           </div>
           <hr class="border-light">
 
-          <button  style="text-decoration: none;" class="btn btn-link p-0 text-white" data-bs-toggle="collapse" data-bs-target="#comments-card-{{ tweet.id }}">
+          <button style="text-decoration: none;" class="btn btn-link p-0 text-white" data-bs-toggle="collapse" data-bs-target="#comments-card-{{ tweet.id }}">
             💬 View Comments ({{ tweet.comments.count }})
           </button>
           <div class="collapse mt-3" id="comments-card-{{ tweet.id }}">
@@ -54,9 +54,9 @@
                   </div>
                   {% if request.user == comment.user %}
                   <div class="btn-group">
-                    <button class="btn btn-sm btn-outline-light js-comment-edit"
+                    <button class="btn btn-sm btn-outline-light comment-edit"
                             data-id="{{ comment.id }}" data-url="{% url 'comment_edit' comment.id %}">Edit</button>
-                    <button class="btn btn-sm btn-outline-danger js-comment-delete"
+                    <button class="btn btn-sm btn-outline-danger comment-delete"
                             data-id="{{ comment.id }}" data-url="{% url 'comment_delete' comment.id %}">Delete</button>
                   </div>
                   {% endif %}
@@ -79,8 +79,51 @@
     </div>
   </div>
 </div>
+{% if not request.user.is_authenticated %}
+<style>
+.popup-box { 
+  position: fixed; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); /* centers the popup */
+  z-index: 10800; 
+}
+.popup { 
+  min-width: 240px; 
+}
+</style>
+<div class="popup-box">
+  <div id="popup" class="toast align-items-center text-bg-dark popup" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        You must <strong>log in</strong> or <strong>register</strong> to like, dislike, or comment.
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const popup = document.getElementById("popup");
+    const showPopup = () => {
+      new bootstrap.Toast(popup, { delay: 3000 }).show();
+    };
+    document.querySelectorAll(".like-btn, .dislike-btn").forEach(btn => {
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        showPopup();
+      });
+    });
+    document.querySelectorAll(".comment-form").forEach(form => {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        showPopup();
+      });
+    });
+  });
+</script>
+{% endif %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
 function getCookie(name) {
   const pairs = document.cookie.split(';').map(s => s.trim());
@@ -119,23 +162,24 @@ function updateTimes(){
 }
 setInterval(updateTimes, 60_000);
 updateTimes();
-document.querySelectorAll('.js-like').forEach(btn=>{
+document.querySelectorAll('.like-btn').forEach(btn=>{
   btn.addEventListener('click', async function(){
     const url = this.dataset.url, id = this.dataset.id;
     try {
       const data = await post(url);
-      document.getElementById('like-count-' + id).textContent = data.likes;
-      if (data.dislikes !== undefined) document.getElementById('dislike-count-' + id).textContent = data.dislikes;
+      document.getElementById('like-' + id).textContent = data.likes;
+      if (data.dislikes !== undefined) document.getElementById('dislike-' + id).textContent = data.dislikes;
     } catch (e){ console.error(e); }
   });
 });
-document.querySelectorAll('.js-dislike').forEach(btn=>{
+
+document.querySelectorAll('.dislike-btn').forEach(btn=>{
   btn.addEventListener('click', async function(){
     const url = this.dataset.url, id = this.dataset.id;
     try {
       const data = await post(url);
-      document.getElementById('dislike-count-' + id).textContent = data.dislikes;
-      if (data.likes !== undefined) document.getElementById('like-count-' + id).textContent = data.likes;
+      document.getElementById('dislike-' + id).textContent = data.dislikes;
+      if (data.likes !== undefined) document.getElementById('like-' + id).textContent = data.likes;
     } catch (e){ console.error(e); }
   });
 });
@@ -143,36 +187,21 @@ document.querySelectorAll('.comment-form').forEach(form=>{
   form.addEventListener('submit', async function(e){
     e.preventDefault();
     const url = this.dataset.url;
-    const tweetId = this.dataset.tweetId;
     const input = this.querySelector('input[name="body"]');
     const val = input.value.trim();
     if (!val) return;
     try {
       const fd = new FormData();
       fd.append('body', val);
-      const data = await post(url, fd);
-      let controls = '';
-      if (data.edit_url && data.delete_url) {
-        controls = `<div class="btn-group">
-                      <button class="btn btn-sm btn-outline-light js-comment-edit" data-id="${data.id}" data-url="${data.edit_url}">Edit</button>
-                      <button class="btn btn-sm btn-outline-danger js-comment-delete" data-id="${data.id}" data-url="${data.delete_url}">Delete</button>
-                    </div>`;
-      }
-      const html = `<div class="comment-row d-flex justify-content-between align-items-center mb-2" id="comment-${data.id}">
-                      <div><b>@${esc(data.user)}</b>: ${esc(data.body)}<br>
-                        <small class="text-muted" data-created="${data.created_at}">${timeAgo(data.created_at)}</small>
-                      </div>${controls}
-                    </div>`;
-      document.getElementById('comments-' + tweetId).insertAdjacentHTML('beforeend', html);
-      attachCommentButtons(document.getElementById('comment-' + data.id));
-      this.reset();
+      await post(url, fd);
+      window.location.reload();
     } catch (e){ console.error(e); }
   });
 });
 function attachCommentButtons(commentEl){
   if (!commentEl) return;
-  const editBtn = commentEl.querySelector('.js-comment-edit');
-  const deleteBtn = commentEl.querySelector('.js-comment-delete');
+  const editBtn = commentEl.querySelector('.comment-edit');
+  const deleteBtn = commentEl.querySelector('.comment-delete');
   if (editBtn) {
     editBtn.addEventListener('click', async function(){
       const url = this.dataset.url;
