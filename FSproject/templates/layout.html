@@ -55,8 +55,8 @@
   <button class="btn-btn-danger"type="submit">Logout</button>
 </form>
       {% else %}
-      <a href="{% url 'register' %}"  class="btn btn-success mx-2">register</a>
-      <a href="{% url 'login' %}"  class="btn btn-success mx-2">login</a>
+      <a href="{% url 'register' %}"  class="btn btn-success mx-2" style="text-decoration: none;">register</a>
+      <a href="{% url 'login' %}"  class="btn btn-success mx-2"style="text-decoration: none;">login</a>
       {% endif %}
     </div>
   </div>
@@ -67,3 +67,4 @@
 </body>
 
 </html>
+
