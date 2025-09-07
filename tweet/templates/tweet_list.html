@@ -212,6 +212,10 @@ function attachCommentButtons(commentEl){
         const div = commentEl.querySelector('div');
         div.innerHTML = `<b>@${esc(data.user)}</b>: ${esc(data.body)}<br>
                          <small class="text-muted" data-created="${data.created_at}">${timeAgo(data.created_at)}</small>`;
+        const fd = new FormData();
+      fd.append('body', val);
+      await post(url, fd);
+      window.location.reload();
       } catch (e){ console.error(e); }
     });
   }
@@ -222,6 +226,10 @@ function attachCommentButtons(commentEl){
       try {
         const data = await post(url);
         if (data.deleted) commentEl.remove();
+        const fd = new FormData();
+      fd.append('body', val);
+      await post(url, fd);
+      window.location.reload();
       } catch (e){ console.error(e); }
     });
   }
@@ -229,3 +237,4 @@ function attachCommentButtons(commentEl){
 document.querySelectorAll('.comment-row').forEach(el => attachCommentButtons(el));
 </script>
 {% endblock %}
+
