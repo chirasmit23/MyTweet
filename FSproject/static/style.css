@@ -78,4 +78,19 @@
     margin: 0 auto;
     border-radius: 4px;
   }
+ @media (max-width: 768px) {
+  .gap {
+            margin-top: 15px; 
+        }
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;  }
+
+        .navbar-collapse {
+            margin-top: 10px;
+        }
+
+ }
+
 
